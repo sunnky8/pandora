@@ -1,12 +1,9 @@
 <h3 align="center">Pandora - 基于k8s的自动化发布部署工具</h3>
 
-[预览](http://116.62.121.87:8878/)
+[点击预览](http://116.62.121.87:8878/)
+
 - username： admin
 - password： adminadmin
-
-![](https://github.com/ielepro/pandora/blob/master/assert/dashboard.png)
-
-![](https://github.com/ielepro/pandora/blob/master/assert/deploy.png)
 
 ## 特性
 
@@ -37,3 +34,10 @@
    - [gin](https://github.com/gin-gonic/gin)
    - [syncd](https://syncd.cc/docs/#donate.md)
    - [client-go](https://github.com/kubernetes/client-go)
+   
+## 界面
+
+- dashboard
+![](https://github.com/ielepro/pandora/blob/master/assert/dashboard.png)
+- 部署
+![](https://github.com/ielepro/pandora/blob/master/assert/deploy.png)
