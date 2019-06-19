@@ -4,9 +4,9 @@
 - username： admin
 - password： adminadmin
 
-![](https://github.com/ielepro/pandora/assert/dashboard.png)
+![](https://github.com/ielepro/pandora/blob/master/assert/dashboard.png)
 
-![](https://github.com/ielepro/pandora/assert/deploy.png)
+![](https://github.com/ielepro/pandora/blob/master/assert/deploy.png)
 
 ## 特性
 
