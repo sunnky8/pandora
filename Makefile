@@ -43,3 +43,9 @@ build-linux:
 	@echo "build-linux start >>>"
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO_CMD) build -o $(PANDORA_BIN) ./pandora/main.go
 	@echo ">>> build-linux complete"
+
+.PHONY: fmt
+fmt:
+	@echo "format code >>>"
+	find . -name '*.go' | grep -v vendor | xargs gofmt -w -s
+	@echo ">>> format code completed"

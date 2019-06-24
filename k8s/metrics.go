@@ -12,12 +12,12 @@ const ResourceNodeName = "nodeName"
 
 type Metrics struct{}
 
-func (m *Metrics) NodeResourceList() ([]map[coreV1.ResourceName] interface{}, error) {
+func (m *Metrics) NodeResourceList() ([]map[coreV1.ResourceName]interface{}, error) {
 	var (
-		err error
-		nodeResources [] map[coreV1.ResourceName] interface{}
-		nodeMetricsList *v1beta1.NodeMetricsList
-		node *coreV1.Node
+		err                                         error
+		nodeResources                               []map[coreV1.ResourceName]interface{}
+		nodeMetricsList                             *v1beta1.NodeMetricsList
+		node                                        *coreV1.Node
 		cpuRequestsFraction, memoryRequestsFraction float64 = 0, 0
 	)
 
@@ -40,7 +40,7 @@ func (m *Metrics) NodeResourceList() ([]map[coreV1.ResourceName] interface{}, er
 		if node, err = k8sNode.GET(nodeMetric.Name); err != nil {
 			return nodeResources, err
 		}
-		requestsFraction := make(map[coreV1.ResourceName] interface{})
+		requestsFraction := make(map[coreV1.ResourceName]interface{})
 
 		cpuRequests := nodeMetric.Usage.Cpu()
 		memoryRequests := nodeMetric.Usage.Memory()

@@ -10,7 +10,7 @@ import (
 )
 
 func CurrentPath() (string, error) {
-    dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		return "", err
 	}
@@ -18,8 +18,8 @@ func CurrentPath() (string, error) {
 }
 
 func CurrentParentPath() (string, error) {
-    //path := strings.Join([]string{filepath.Dir(os.Args[0]), "/../"}, "")
-    realPath, err := filepath.Abs("./")
+	//path := strings.Join([]string{filepath.Dir(os.Args[0]), "/../"}, "")
+	realPath, err := filepath.Abs("./")
 	if err != nil {
 		return "", err
 	}
@@ -27,38 +27,38 @@ func CurrentParentPath() (string, error) {
 }
 
 func CreatePath(path string) error {
-    exists := Exists(path)
-    if !exists {
-        if err := os.Mkdir(path, os.ModePerm); err != nil {
-            return err
-        }
-    }
-    return nil
+	exists := Exists(path)
+	if !exists {
+		if err := os.Mkdir(path, os.ModePerm); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func Exists(path string) bool {
-    _, err := os.Stat(path)
-    if err == nil {
-        return true
-    }
-    if os.IsExist(err) {
-        return true
-    }
-    return false
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsExist(err) {
+		return true
+	}
+	return false
 }
 
 func IsDir(path string) bool {
-    s, err := os.Stat(path)
-    if err != nil {
-        return false
-    }
-    return s.IsDir()
+	s, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return s.IsDir()
 }
 
 func IsFile(path string) bool {
-    return !IsDir(path)
+	return !IsDir(path)
 }
 
 func RemovePath(path string) error {
-    return os.RemoveAll(path)
+	return os.RemoveAll(path)
 }

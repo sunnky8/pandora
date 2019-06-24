@@ -5,76 +5,76 @@
 package deploy
 
 import (
-    "html/template"
-    "bytes"
-    "time"
-    "fmt"
+	"bytes"
+	"fmt"
+	"html/template"
+	"time"
 
-    "github.com/ielepro/pandora"
-    "github.com/ielepro/pandora/util/gostring"
+	"github.com/ielepro/pandora"
+	"github.com/ielepro/pandora/util/gostring"
 )
 
 const (
-    MAIL_MODE_AUDIT_NOTICE = 1
-    MAIL_MODE_AUDIT_RESULT = 2
-    MAIL_MODE_DEPLOY = 3
+	MAIL_MODE_AUDIT_NOTICE = 1
+	MAIL_MODE_AUDIT_RESULT = 2
+	MAIL_MODE_DEPLOY       = 3
 )
 
 const (
-    MAIL_STATUS_SUCCESS = 1
-    MAIL_STATUS_FAILED = 0
+	MAIL_STATUS_SUCCESS = 1
+	MAIL_STATUS_FAILED  = 0
 )
 
 type MailMessage struct {
-    Mail        string
-    ApplyId     int
-    Mode        int
-    Status      int
-    Title       string
+	Mail    string
+	ApplyId int
+	Mode    int
+	Status  int
+	Title   string
 }
 
 func MailSend(msg *MailMessage) {
-    mails, ok := mailSendToMails(msg.Mail)
-    if !ok {
-        return
-    }
-    pandora.App.Mail.AsyncSend(&pandora.SendMailMessage{
-        To: mails,
-        Subject: gostring.JoinStrings(mailSubjectPrefix(msg.Mode), msg.Title),
-        Body: mailBodyTemplate(msg),
-    })
+	mails, ok := mailSendToMails(msg.Mail)
+	if !ok {
+		return
+	}
+	pandora.App.Mail.AsyncSend(&pandora.SendMailMessage{
+		To:      mails,
+		Subject: gostring.JoinStrings(mailSubjectPrefix(msg.Mode), msg.Title),
+		Body:    mailBodyTemplate(msg),
+	})
 }
 
 func mailSubjectPrefix(mode int) string {
-    prefix := "Pandora邮件通知:"
-    switch mode {
-    case MAIL_MODE_AUDIT_NOTICE:
-        fallthrough
-    case MAIL_MODE_AUDIT_RESULT:
-        prefix = "Pandora审核通知:"
-    case MAIL_MODE_DEPLOY:
-        prefix = "Pandora部署通知:"
-    }
-    return prefix
+	prefix := "Pandora邮件通知:"
+	switch mode {
+	case MAIL_MODE_AUDIT_NOTICE:
+		fallthrough
+	case MAIL_MODE_AUDIT_RESULT:
+		prefix = "Pandora审核通知:"
+	case MAIL_MODE_DEPLOY:
+		prefix = "Pandora部署通知:"
+	}
+	return prefix
 }
 
 func mailApplyLink(applyId int) string {
-    return fmt.Sprintf("%s/deploy/deploy?id=%d", pandora.App.AppHost, applyId)
+	return fmt.Sprintf("%s/deploy/deploy?id=%d", pandora.App.AppHost, applyId)
 }
 
 func mailSendToMails(mail string) ([]string, bool) {
-    if mail != "" {
-        mails := gostring.Str2StrSlice(mail, ",")
-        if len(mails) > 0 {
-            return mails, true
-        }
-    }
-    return nil, false
+	if mail != "" {
+		mails := gostring.Str2StrSlice(mail, ",")
+		if len(mails) > 0 {
+			return mails, true
+		}
+	}
+	return nil, false
 }
 
 func mailBodyTemplate(msg *MailMessage) string {
-    link := mailApplyLink(msg.ApplyId)
-    tpl := `
+	link := mailApplyLink(msg.ApplyId)
+	tpl := `
     <style>
         .pandora-main {
             font-family: "Chinese Quote", BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -187,20 +187,20 @@ func mailBodyTemplate(msg *MailMessage) string {
         <div class="pandora-cpy">©️ {{ .Year }} <a target="_blank" href="https://github.com/ielepro/pandora">Pandora</a>. All Rights Reserved. MIT License.</div>
     </div>
     `
-    t, err := template.New("mail").Parse(tpl)
-    if err != nil {
-        pandora.App.Logger.Error("sendmail body template parse failed, err[%s], mode[%d], apply_id[%d]", err.Error(), msg.Mode, msg.ApplyId)
-        return ""
-    }
-    buf := new(bytes.Buffer)
-    data := map[string]interface{}{
-        "Title": msg.Title,
-        "Link": link,
-        "Mode": msg.Mode,
-        "Status": msg.Status,
-        "Id": msg.ApplyId,
-        "Year": time.Now().Year(),
-    }
-    t.Execute(buf, data)
-    return buf.String()
+	t, err := template.New("mail").Parse(tpl)
+	if err != nil {
+		pandora.App.Logger.Error("sendmail body template parse failed, err[%s], mode[%d], apply_id[%d]", err.Error(), msg.Mode, msg.ApplyId)
+		return ""
+	}
+	buf := new(bytes.Buffer)
+	data := map[string]interface{}{
+		"Title":  msg.Title,
+		"Link":   link,
+		"Mode":   msg.Mode,
+		"Status": msg.Status,
+		"Id":     msg.ApplyId,
+		"Year":   time.Now().Year(),
+	}
+	t.Execute(buf, data)
+	return buf.String()
 }
