@@ -7,14 +7,13 @@ import (
 )
 
 type Node struct {
-
 }
 
 func (n *Node) GET(nodeName string) (*coreV1.Node, error) {
 	var (
-		clientSet  *kubernetes.Clientset
-		err        error
-		node *coreV1.Node
+		clientSet *kubernetes.Clientset
+		err       error
+		node      *coreV1.Node
 	)
 
 	if clientSet, err = initClient(); err != nil {

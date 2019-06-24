@@ -8,11 +8,11 @@ import (
 	"fmt"
 
 	"github.com/ielepro/pandora"
-	"github.com/ielepro/pandora/util/gofile"
-	"github.com/ielepro/pandora/util/command"
-	"github.com/ielepro/pandora/util/gostring"
-	"github.com/ielepro/pandora/module/project"
 	"github.com/ielepro/pandora/module/deploy"
+	"github.com/ielepro/pandora/module/project"
+	"github.com/ielepro/pandora/util/command"
+	"github.com/ielepro/pandora/util/gofile"
+	"github.com/ielepro/pandora/util/gostring"
 )
 
 func HookBuild(applyId int) {
@@ -45,15 +45,15 @@ func HookBuild(applyId int) {
 	}
 
 	s := gostring.JoinStrings(
-        "#!/bin/bash\n\n",
-        "#--------- build hook scripts env ---------\n",
-        fmt.Sprintf("env_apply_id=%d\n", apply.ID),
+		"#!/bin/bash\n\n",
+		"#--------- build hook scripts env ---------\n",
+		fmt.Sprintf("env_apply_id=%d\n", apply.ID),
 		fmt.Sprintf("env_apply_name='%s'\n", apply.Name),
 		fmt.Sprintf("env_pack_file='%s'\n", build.Tar),
 		fmt.Sprintf("env_build_output='%s'\n", build.Output),
 		fmt.Sprintf("env_build_errmsg='%s'\n", build.Errmsg),
 		fmt.Sprintf("env_build_status=%d\n", buildStatus),
-        proj.BuildHookScript,
+		proj.BuildHookScript,
 	)
 	hookCommandTaskRun(s, applyId)
 }
@@ -81,12 +81,12 @@ func HookDeploy(applyId int) {
 	}
 
 	s := gostring.JoinStrings(
-        "#!/bin/bash\n\n",
-        "#--------- deploy hook scripts env ---------\n",
-        fmt.Sprintf("env_apply_id=%d\n", apply.ID),
+		"#!/bin/bash\n\n",
+		"#--------- deploy hook scripts env ---------\n",
+		fmt.Sprintf("env_apply_id=%d\n", apply.ID),
 		fmt.Sprintf("env_apply_name='%s'\n", apply.Name),
 		fmt.Sprintf("env_deploy_status=%d\n", deployStatus),
-        proj.DeployHookScript,
+		proj.DeployHookScript,
 	)
 	hookCommandTaskRun(s, applyId)
 }
@@ -95,7 +95,7 @@ func hookCommandTaskRun(s string, applyId int) {
 	scriptFile := gostring.JoinStrings(pandora.App.LocalTmpSpace, "/", gostring.StrRandom(24), ".sh")
 	if err := gofile.CreateFile(scriptFile, []byte(s), 0744); err != nil {
 		pandora.App.Logger.Error("hook script file create failed, err[%s], apply_id[%d]", err.Error(), applyId)
-        return
+		return
 	}
 	cmds := []string{
 		fmt.Sprintf("/bin/bash -c %s", scriptFile),
@@ -105,5 +105,5 @@ func hookCommandTaskRun(s string, applyId int) {
 	task.Run()
 	if err := task.GetError(); err != nil {
 		pandora.App.Logger.Error("hook script run failed, err[%s], output[%s], apply_id[%d]", err.Error(), gostring.JsonEncode(task.Result()), applyId)
-    }
+	}
 }

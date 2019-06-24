@@ -6,21 +6,20 @@ import (
 	"github.com/ielepro/pandora/render"
 )
 
-func DeploymentList(c *gin.Context)  {
+func DeploymentList(c *gin.Context) {
 	dp := &k8s.Deployment{}
 	restList, err := dp.List()
-	if err != nil{
+	if err != nil {
 		render.AppError(c, err.Error())
 	}
 	render.JSON(c, restList)
 }
 
-func Resources(c *gin.Context)  {
+func Resources(c *gin.Context) {
 	metrics := &k8s.Metrics{}
 	resources, err := metrics.NodeResourceList()
-	if err != nil{
+	if err != nil {
 		render.AppError(c, err.Error())
 	}
 	render.JSON(c, resources)
 }
-
