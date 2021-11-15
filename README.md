@@ -1,10 +1,5 @@
 <h3 align="center">Pandora - 基于k8s的自动化发布部署工具</h3>
 
-[点击预览](http://116.62.121.87:8878/)
-
-- username： admin
-- password： adminadmin
-
 ## 特性
 
 - Go语言开发，编译简单、运行高效
